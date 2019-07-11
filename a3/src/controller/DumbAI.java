@@ -27,15 +27,23 @@ public class DumbAI extends Controller {
 		assert g != null;
 		// Initialize the Dumb AI's move
 		Location dumbMove = new Location(0, 0);
-		
+		// boolean object to ensure that there is a remaining space
+		boolean remaining_space = false;
 		// Find the blank space with the smallest available column number with the smallest available row number
 		for (Location loc : Board.LOCATIONS) {
 			if (g.getBoard().get(loc) == null) {
+				remaining_space = true;
 				dumbMove = loc;
 				return dumbMove;
 			}
 		}
-		//Just to make sure the function always returns type Location
+		
+		// If there are no remaining spaces, return null
+		if (!remaining_space) {
+			return null;
+		}
+		
+		//Return Location dumbMove if there is a remaining space.
 		return dumbMove;
 	}
 
