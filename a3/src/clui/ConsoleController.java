@@ -27,6 +27,7 @@ public class ConsoleController extends Controller {
 		Scanner lines = new Scanner(System.in);
 		while (true) {
 			try {
+				System.out.println("In the format 'row column' ...");
 				System.out.print("enter row and column for " + g.nextTurn() + ": ");
 				String in = lines.nextLine();
 				if (in.equals("exit") || in.equals("quit"))
