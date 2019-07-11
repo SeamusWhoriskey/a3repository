@@ -9,6 +9,9 @@ import model.Location;
 import model.NotImplementedException;
 import model.Player;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * A MinMaxAI is a controller that uses the minimax algorithm to select the next
  * move.  The minimax algorithm searches for the best possible next move, under
@@ -79,7 +82,13 @@ public abstract class MinMaxAI extends Controller {
 	 */
 	protected MinMaxAI(Player me, int depth) {
 		super(me);
-		// TODO Auto-generated method stub
+		
+		// this is to end the recursion
+		if (depth == 0) {
+			
+		} else {
+//			MinMaxAI(me, depth-1);
+		}
 		throw new NotImplementedException();
 	}
 
@@ -89,6 +98,23 @@ public abstract class MinMaxAI extends Controller {
 	 */
 	protected @Override Location nextMove(Game g) {
 		// TODO Auto-generated method stub
-		throw new NotImplementedException();
+//		List<Location> avail = new ArrayList<Location>();
+		
+		// Initialization of max_score, to keep track of best possible score
+		double max_score = Double.NEGATIVE_INFINITY;
+		// Initialization of best move, to keep track of the move that optimizes score
+		Location best_move = null;
+		// For each move on the board,
+		for (Location move : moves(g.getBoard())) {
+			// Create the new board c_board to be the current board plus the next move
+			Board c_board = g.getBoard().update(me, move);
+			// If the new board state is better than the previous maximum,
+			if (estimate(c_board) >= max_score) {
+				best_move = move;				// Set best_move to be current move
+				max_score = estimate(c_board);	// Set max_score to be the score of the current board
+			}
+		}
+
+		return best_move;
 	}
 }
