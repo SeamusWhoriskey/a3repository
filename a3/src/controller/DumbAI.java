@@ -23,6 +23,8 @@ public class DumbAI extends Controller {
 		// Note: Calling delay here will make the CLUI work a little more
 		// nicely when competing different AIs against each other.
 		
+		// Asserting g is not null
+		assert g != null;
 		// Initialize the Dumb AI's move
 		Location dumbMove = new Location(0, 0);
 		
