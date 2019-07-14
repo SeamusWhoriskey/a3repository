@@ -102,6 +102,7 @@ public abstract class MinMaxAI extends Controller {
 		return loc_out;
 	}
 	
+	
 
 	/** Helper function for nextMove 
 	 *  Returns the optimal move 
@@ -122,8 +123,8 @@ public abstract class MinMaxAI extends Controller {
 		// Initialized as N/A and worst possible score for Player
 		String[] optimal = {"N/A", String.valueOf(best_score)};
 		
-		// If the depth has been reached, or if there is a winner,
-		if (depth == 0 || b.getWinner() != null) {
+		// If the depth has been reached, or if the game is over,
+		if (depth == 0 || b.getState() != State.NOT_OVER) {
 			// Set the score of optimal to be the current score of the board.
 			double score = estimate(b);
 			optimal[1] = String.valueOf(score);
@@ -143,21 +144,29 @@ public abstract class MinMaxAI extends Controller {
 			double est = Double.valueOf(curr_score[1]);
 			if (p == me) {	// If Player is me, 
 				// try to find the highest possible value of est, and
-				if (best_score <= est) {
+				if (best_score < est) {
 					// Set the optimal move to be the move maximizing est
+					best_score = est;
 					curr_score[1] = String.valueOf(est);
 					optimal = curr_score;
 				}
 			} else {	// Otherwise, 
 				// Try to find the lowest possible value of est, and
-				if (best_score >= est) {
+				if (best_score > est) {
 					// Set the optimal move for the opponent to be the move minimizing est
+					best_score = est;
 					curr_score[1] = String.valueOf(est);
 					optimal = curr_score;
 				}
 			}
 				
 			
+		}
+		Location l = new Location(4,4);
+		if (optimal[0] == l.toString()) {
+			for (Location move2 : spaces) {
+				System.out.println(move2.toString());
+			}	
 		}
 		return optimal;
 		
