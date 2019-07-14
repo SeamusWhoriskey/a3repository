@@ -72,6 +72,8 @@ public abstract class MinMaxAI extends Controller {
 	 */
 	protected abstract Iterable<Location> moves(Board b);
 	
+	protected int d;
+	
 	/**
 	 * Create an AI that will recursively search for the next move using the
 	 * minimax algorithm.  When searching for a move, the algorithm will look
@@ -82,14 +84,9 @@ public abstract class MinMaxAI extends Controller {
 	 */
 	protected MinMaxAI(Player me, int depth) {
 		super(me);
+		// Set the int d to hold the desired depth 
+		this.d = depth;
 		
-		// this is to end the recursion
-		if (depth == 0) {
-			
-		} else {
-//			MinMaxAI(me, depth-1);
-		}
-		throw new NotImplementedException();
 	}
 
 	/**
@@ -98,23 +95,77 @@ public abstract class MinMaxAI extends Controller {
 	 */
 	protected @Override Location nextMove(Game g) {
 		// TODO Auto-generated method stub
-//		List<Location> avail = new ArrayList<Location>();
-		
-		// Initialization of max_score, to keep track of best possible score
-		double max_score = Double.NEGATIVE_INFINITY;
-		// Initialization of best move, to keep track of the move that optimizes score
-		Location best_move = null;
-		// For each move on the board,
-		for (Location move : moves(g.getBoard())) {
-			// Create the new board c_board to be the current board plus the next move
-			Board c_board = g.getBoard().update(me, move);
-			// If the new board state is better than the previous maximum,
-			if (estimate(c_board) >= max_score) {
-				best_move = move;				// Set best_move to be current move
-				max_score = estimate(c_board);	// Set max_score to be the score of the current board
-			}
-		}
+		String loc_string = nextMoveHelper(g.getBoard(), me, d)[0];
+		int x_loc = Integer.parseInt(Character.toString(loc_string.charAt(1)));
+		int y_loc = Integer.parseInt(Character.toString(loc_string.charAt(3)));
+		Location loc_out = new Location(x_loc, y_loc);
+		return loc_out;
+	}
+	
 
-		return best_move;
+	/** Helper function for nextMove 
+	 *  Returns the optimal move 
+	 */
+	protected String[] nextMoveHelper(Board b, Player p, int depth) {
+		
+		// best_score will keep track of the best possible score for each player
+		// Initialize at worst possible value for Player p, being inf for opponent
+		double best_score = Double.POSITIVE_INFINITY;
+		// and -inf for me
+		if (p == me) {
+			best_score *= -1;
+		}
+		
+		// The String[] optimal contains 
+		// [0]: Location of best move
+		// [1]: Score of best move
+		// Initialized as N/A and worst possible score for Player
+		String[] optimal = {"N/A", String.valueOf(best_score)};
+		
+		// If the depth has been reached, or if there is a winner,
+		if (depth == 0 || b.getWinner() != null) {
+			// Set the score of optimal to be the current score of the board.
+			double score = estimate(b);
+			optimal[1] = String.valueOf(score);
+			return optimal;
+		}
+		
+		// Get the spaces that the AI will evaluate
+		Iterable <Location> spaces = moves(b);
+		for (Location move : spaces) {
+			// Create an updated board with the current move
+			Board curr_board = b.update(p,  move);
+			// Create a String[] under the same constraints as optimal, detailed above
+			String[] curr_score = nextMoveHelper(curr_board, p.opponent(), depth -1);
+			// Set the move of the current score to be the current move
+			curr_score[0] = move.toString();
+			// Create a double est that holds the value of the current score.
+			double est = Double.valueOf(curr_score[1]);
+			if (p == me) {	// If Player is me, 
+				// try to find the highest possible value of est, and
+				if (best_score <= est) {
+					// Set the optimal move to be the move maximizing est
+					curr_score[1] = String.valueOf(est);
+					optimal = curr_score;
+				}
+			} else {	// Otherwise, 
+				// Try to find the lowest possible value of est, and
+				if (best_score >= est) {
+					// Set the optimal move for the opponent to be the move minimizing est
+					curr_score[1] = String.valueOf(est);
+					optimal = curr_score;
+				}
+			}
+				
+			
+		}
+		return optimal;
+		
+	}
+
+	
+	/** Scores the board */
+	protected double scorer(Board b, Player p) {
+		return estimate(b);
 	}
 }
