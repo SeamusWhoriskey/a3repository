@@ -19,7 +19,7 @@ import model.Player;
 public class SmartAI extends MinMaxAI {
 
 	public SmartAI(Player me) {
-		super(me, 2);
+		super(me, 4);
 	}
 
 	
