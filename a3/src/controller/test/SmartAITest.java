@@ -5,6 +5,8 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import clui.BoardPrinter;
+import controller.Controller;
 import controller.SmartAI;
 import model.Board;
 import model.Location;
@@ -84,6 +86,27 @@ public class SmartAITest {
 		assertEquals(xScores[6], 3);
 		assertTrue(oScores[8] - xScores[8] > oScores[9] - xScores[9]);
 		assertTrue(aio.estimate(boards[8]) > aio.estimate(boards[9]));
+	}
+	
+	@Test
+	public void testBestMove() {
+		Board test_board = Board.EMPTY;
+		test_board = test_board.update(Player.X, new Location(4,4));
+		test_board = test_board.update(Player.O, new Location(5,5));
+		
+		for (Location m : aix.moves(test_board)) {
+			Board b = test_board.update(Player.X, m);
+			System.out.println(aio.score(b, Player.X));
+			for (Location m2 : aio.moves(b)) {
+				double k = aio.score(b.update(Player.O, m2), Player.X);
+				System.out.println(k);
+				if (k == 65) {
+					BoardPrinter.printBoard(b.update(Player.O,  m2));
+				}
+			}
+			
+		}
+		
 	}
 
 }
