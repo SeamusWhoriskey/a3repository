@@ -1,6 +1,6 @@
 package controller;
 
-//import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNull;
 
 import model.Board;
 import model.Board.State;
@@ -90,7 +90,7 @@ public abstract class MinMaxAI extends Controller {
 	 * Return the move that maximizes the score according to the minimax
 	 * algorithm described above.
 	 */
-	protected @Override Location nextMove(Game g) {
+	protected @Override Location nextMove(@NonNull Game g) {
 		// TODO Auto-generated method stub
 		String loc_string = nextMoveHelper(g.getBoard(), me, d)[0];
 		int x_loc = Integer.parseInt(Character.toString(loc_string.charAt(1)));
@@ -104,7 +104,9 @@ public abstract class MinMaxAI extends Controller {
 	/** Helper function for nextMove 
 	 *  Returns the optimal move 
 	 */
-	protected String[] nextMoveHelper(Board b, Player p, int depth) {
+	protected String[] nextMoveHelper(@NonNull Board b, 
+									  @NonNull Player p, 
+									  @NonNull int depth) {
 		
 		// best_score will keep track of the best possible score for each player
 		// Initialize at worst possible value for Player p, being inf for opponent
