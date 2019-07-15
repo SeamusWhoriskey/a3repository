@@ -170,8 +170,7 @@ public abstract class MinMaxAI extends Controller {
 	}
 
 	
-	/** Scores the board */
-	protected double scorer(Board b, Player p) {
-		return estimate(b);
+	public Location testMove(Game g) {
+		return nextMove(g);
 	}
 }
