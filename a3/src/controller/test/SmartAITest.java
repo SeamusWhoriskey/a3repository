@@ -9,6 +9,7 @@ import clui.BoardPrinter;
 import controller.Controller;
 import controller.SmartAI;
 import model.Board;
+import model.Game;
 import model.Location;
 import model.Player;
 
@@ -90,22 +91,14 @@ public class SmartAITest {
 	
 	@Test
 	public void testBestMove() {
-		Board test_board = Board.EMPTY;
-		test_board = test_board.update(Player.X, new Location(4,4));
-		test_board = test_board.update(Player.O, new Location(5,5));
+		Game g = new Game(Player.X);
+		g.submitMove(Player.X, new Location(4,4));
+		g.submitMove(Player.O, new Location(3,3));
+		g.submitMove(Player.X, new Location(3,4));
+		// Testing a situation that has one optimal move.
+		Location corr_loc = new Location(2,4);
+		assertEquals(aio.testMove(g), corr_loc);
 		
-		for (Location m : aix.moves(test_board)) {
-			Board b = test_board.update(Player.X, m);
-			System.out.println(aio.score(b, Player.X));
-			for (Location m2 : aio.moves(b)) {
-				double k = aio.score(b.update(Player.O, m2), Player.X);
-				System.out.println(k);
-				if (k == 65) {
-					BoardPrinter.printBoard(b.update(Player.O,  m2));
-				}
-			}
-			
-		}
 		
 	}
 
